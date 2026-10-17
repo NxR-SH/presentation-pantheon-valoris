@@ -1,0 +1,925 @@
+/* ==========================================================================
+   archive.css — the desk view opened from the two archive entries.
+   Everything lives in the 1920 x 1080 scene so it scales with the room.
+   ========================================================================== */
+
+.archive {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  pointer-events: auto;
+  overflow: hidden;
+  background: #0b0705;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 420ms ease, visibility 0s linear 420ms;
+  will-change: opacity;
+}
+
+.archive.is-active {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 420ms ease, visibility 0s;
+}
+
+/* --------------------------------------------------------------------------
+   Desk surface and lighting
+   -------------------------------------------------------------------------- */
+.archive__table {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 52% 54% at 62% 38%, rgba(255, 207, 145, 0.17) 0%, rgba(226, 160, 96, 0.06) 42%, transparent 72%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.012) 0 1px, transparent 1px 5px),
+    repeating-linear-gradient(91deg, transparent 0 246px, rgba(0, 0, 0, 0.34) 246px 250px),
+    linear-gradient(104deg, #1a0f09 0%, #2e1c11 44%, #25160e 68%, #140c08 100%);
+  transform: scale(1.035);
+  transition: transform 1.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.archive.is-active .archive__table {
+  transform: scale(1);
+}
+
+.archive__light {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 34% 28% at 56% 18%, rgba(255, 228, 180, 0.13), transparent 70%),
+    radial-gradient(ellipse 12% 30% at 18% 60%, rgba(255, 196, 130, 0.05), transparent 70%);
+  mix-blend-mode: screen;
+}
+
+.archive__vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 78% 74% at 50% 46%, transparent 40%, rgba(0, 0, 0, 0.28) 76%, rgba(0, 0, 0, 0.72) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.34) 0%, transparent 16%, transparent 88%, rgba(0, 0, 0, 0.38) 100%);
+}
+
+/* --------------------------------------------------------------------------
+   Header / footer chrome
+   -------------------------------------------------------------------------- */
+.archive__head {
+  position: absolute;
+  top: 50px;
+  left: 84px;
+  right: 84px;
+  z-index: 6;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 30px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 400ms ease 160ms, transform 500ms ease 160ms;
+}
+
+.archive.is-active .archive__head {
+  opacity: 1;
+  transform: none;
+}
+
+.archive__kicker {
+  margin: 0 0 8px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: rgba(212, 190, 151, 0.48);
+}
+
+.archive__org {
+  margin: 0;
+  font-size: 33px;
+  font-weight: 550;
+  font-stretch: 92%;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(240, 226, 197, 0.93);
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.45);
+}
+
+.archive__meta {
+  text-align: right;
+  font-family: "Courier New", "Consolas", monospace;
+  font-size: 11px;
+  line-height: 1.7;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(212, 190, 151, 0.5);
+}
+
+.archive__meta p {
+  margin: 0;
+}
+
+.archive__meta p:first-child {
+  color: rgba(230, 210, 172, 0.72);
+}
+
+.archive__foot {
+  position: absolute;
+  left: 84px;
+  right: 84px;
+  bottom: 34px;
+  z-index: 6;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 26px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 400ms ease 240ms, transform 500ms ease 240ms;
+}
+
+.archive.is-active .archive__foot {
+  opacity: 1;
+  transform: none;
+}
+
+.archive__status {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: "Courier New", "Consolas", monospace;
+}
+
+.archive__counter {
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  color: rgba(234, 214, 176, 0.72);
+}
+
+.archive__hint {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(212, 190, 151, 0.4);
+}
+
+.archive__controls {
+  display: flex;
+  gap: 12px;
+}
+
+.archive__btn {
+  min-width: 150px;
+  padding: 9px 16px 10px;
+  border: 1px solid rgba(221, 202, 166, 0.28);
+  background: rgba(26, 17, 10, 0.5);
+  font-family: "Saira", "Bahnschrift", sans-serif;
+  font-size: 10.5px;
+  font-weight: 500;
+  font-stretch: 94%;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(240, 226, 196, 0.88);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7);
+  transition: color 220ms ease, border-color 220ms ease, background-color 220ms ease, opacity 220ms ease;
+}
+
+.archive__btn:hover,
+.archive__btn:focus-visible {
+  color: #f3e6ca;
+  border-color: rgba(238, 216, 172, 0.46);
+  background: rgba(90, 64, 36, 0.22);
+}
+
+.archive__btn:disabled {
+  opacity: 0.24;
+  cursor: default;
+}
+
+.archive__btn--primary {
+  border-color: rgba(232, 205, 156, 0.5);
+  background: rgba(74, 52, 28, 0.34);
+}
+
+.archive__keys {
+  position: absolute;
+  left: 50%;
+  bottom: 1px;
+  margin: 0;
+  transform: translateX(-50%);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(222, 200, 160, 0.46);
+  white-space: nowrap;
+}
+
+.archive__keys kbd {
+  display: inline-block;
+  min-width: 16px;
+  margin-right: 4px;
+  padding: 1px 4px 2px;
+  border: 1px solid rgba(221, 202, 166, 0.2);
+  font-family: inherit;
+  font-size: 9px;
+  text-align: center;
+  color: rgba(234, 214, 176, 0.58);
+}
+
+/* --------------------------------------------------------------------------
+   The closed folder
+   -------------------------------------------------------------------------- */
+.archive__desk {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.archive__folder {
+  position: absolute;
+  left: 470px;
+  top: 238px;
+  z-index: 4;
+  width: 470px;
+  transform: translateX(220px) rotate(1.2deg);
+  transition: transform 780ms cubic-bezier(0.2, 0.76, 0.2, 1);
+  cursor: pointer;
+  filter: drop-shadow(0 34px 32px rgba(0, 0, 0, 0.58))
+    drop-shadow(0 8px 10px rgba(0, 0, 0, 0.4));
+}
+
+.archive.has-page .archive__folder {
+  transform: translateX(0) rotate(-2deg);
+}
+
+.archive__folder:hover .archive__folder-inner {
+  filter: brightness(1.04);
+}
+
+.archive__folder:focus-visible .archive__folder-inner {
+  outline: 1px solid rgba(236, 216, 178, 0.55);
+  outline-offset: 6px;
+}
+
+.archive__folder-inner {
+  position: relative;
+  width: 100%;
+  opacity: 0;
+  transition: filter 260ms ease;
+}
+
+.archive.is-active .archive__folder-inner {
+  animation: folder-land 860ms 120ms cubic-bezier(0.16, 0.82, 0.24, 1) both;
+}
+
+@keyframes folder-land {
+  0% {
+    opacity: 0;
+    transform: translate(26px, -44px) rotate(-4deg) scale(1.03);
+  }
+  58% {
+    opacity: 1;
+    transform: translate(-3px, 5px) rotate(0.5deg) scale(0.998);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0) scale(1);
+  }
+}
+
+.archive__folder-art {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
+.archive__seal {
+  position: absolute;
+  left: 52%;
+  top: 57%;
+  z-index: 2;
+  height: auto;
+  transform: translate(-50%, -50%) rotate(-2deg);
+  pointer-events: none;
+}
+
+.archive__seal--round {
+  width: 36%;
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.42));
+}
+
+.archive__seal--plate {
+  width: 38%;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.55), 0 1px 2px rgba(0, 0, 0, 0.5);
+  filter: sepia(0.12) brightness(0.98);
+  transform: translate(-50%, -50%) rotate(-1.5deg);
+}
+
+/* --------------------------------------------------------------------------
+   Paper pages
+   -------------------------------------------------------------------------- */
+.archive__pages {
+  position: absolute;
+  left: 978px;
+  top: 92px;
+  z-index: 3;
+  width: 680px;
+  height: 884px;
+  pointer-events: none;
+}
+
+.archive__sheet {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 44px 52px 34px;
+  color: #3b2d1c;
+  background:
+    radial-gradient(ellipse 75% 55% at 26% 8%, rgba(255, 255, 255, 0.5), transparent 66%),
+    radial-gradient(ellipse 62% 48% at 82% 94%, rgba(126, 84, 33, 0.14), transparent 70%),
+    linear-gradient(158deg, #eadfc4 0%, #e4d5b5 52%, #d9c8a5 100%);
+  box-shadow:
+    0 42px 64px rgba(0, 0, 0, 0.58),
+    0 10px 18px rgba(0, 0, 0, 0.36),
+    inset 0 0 0 1px rgba(92, 62, 24, 0.14);
+  opacity: 0;
+  transform: translateX(-210px) rotate(-4deg) scale(0.965);
+  transform-origin: 18% 60%;
+  transition:
+    opacity 380ms ease,
+    transform 620ms cubic-bezier(0.18, 0.74, 0.2, 1);
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.archive__sheet::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../assets/textures/grain-1.png");
+  background-size: 220px 220px;
+  opacity: 0.11;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.archive__sheet::after {
+  content: "";
+  position: absolute;
+  inset: 16px;
+  border: 1px solid rgba(96, 68, 28, 0.07);
+  pointer-events: none;
+}
+
+.archive__sheet.is-active {
+  opacity: 1;
+  transform: translateX(0) rotate(-0.45deg) scale(1);
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.archive__sheet:focus-visible {
+  outline: 1px solid rgba(104, 70, 26, 0.5);
+  outline-offset: -8px;
+}
+
+.archive__sheet.is-active .sheet__redacted span {
+  animation: redact-in 520ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes redact-in {
+  from { transform: scaleX(0); opacity: 0; }
+  to { transform: scaleX(1); opacity: 0.84; }
+}
+
+/* --------------------------------------------------------------------------
+   Prose pages (the organisation dossier)
+   -------------------------------------------------------------------------- */
+.archive__sheet--doc {
+  padding: 34px 44px 24px;
+}
+
+.archive__sheet--doc .sheet__title {
+  font-size: 34px;
+  letter-spacing: 0.045em;
+}
+
+/* Title page of a bound document: the name of the dossier carries the sheet. */
+.archive__sheet--masthead .sheet__title {
+  font-size: 44px;
+  letter-spacing: 0.025em;
+}
+
+.archive__sheet--masthead .sheet__title-row {
+  margin-top: 30px;
+}
+
+/* The notice of a title page sits at the foot of the sheet. */
+.archive__sheet--masthead .sheet__note {
+  margin-top: auto;
+  margin-bottom: 2px;
+}
+
+.archive__sheet--doc .sheet__title-row {
+  margin-top: 22px;
+}
+
+.archive__sheet--doc .sheet__rule {
+  margin: 12px 0 16px;
+}
+
+.archive__sheet--doc .sheet__body {
+  font-size: 13.5px;
+  line-height: 1.47;
+}
+
+.archive__sheet--doc .sheet__field {
+  grid-template-columns: 168px 1fr;
+  padding: 5px 0;
+}
+
+.archive__sheet--doc .sheet__field dt {
+  font-size: 9px;
+  line-height: 1.8;
+}
+
+.archive__sheet--doc .sheet__field dd {
+  font-size: 13px;
+}
+
+.sheet__para {
+  margin: 0 0 9px;
+}
+
+.sheet__para:last-child {
+  margin-bottom: 0;
+}
+
+.sheet__lead {
+  font-weight: 700;
+  color: #38270f;
+}
+
+.sheet__subhead {
+  margin: 14px 0 7px;
+  font-family: "Saira", "Bahnschrift", sans-serif;
+  font-size: 10.5px;
+  font-weight: 650;
+  letter-spacing: 0.17em;
+  line-height: 1.35;
+  text-transform: uppercase;
+  color: #4c3417;
+}
+
+.sheet__subhead:first-child {
+  margin-top: 0;
+}
+
+
+/* A short data block inside a prose page (identity, contract terms, …). */
+.sheet__fields--facts {
+  margin: 2px 0 12px;
+}
+
+.sheet__fields--facts .sheet__field {
+  grid-template-columns: 148px 1fr;
+  gap: 14px;
+  padding: 4px 0;
+}
+
+.sheet__fields--facts .sheet__field dt {
+  font-size: 9px;
+  line-height: 1.75;
+}
+
+.sheet__fields--facts .sheet__field dd {
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+/* Closing mark of a section, in the footer of the last sheet it spans. */
+.sheet__end {
+  white-space: nowrap;
+  font-family: "Saira", "Bahnschrift", sans-serif;
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-align: center;
+  text-transform: uppercase;
+  color: rgba(126, 44, 31, 0.62);
+}
+
+.sheet__bullets {
+  margin: 6px 0 11px;
+  padding: 0;
+  list-style: none;
+}
+
+.sheet__bullets li {
+  position: relative;
+  margin: 0 0 5px;
+  padding-left: 15px;
+  line-height: 1.45;
+}
+
+.sheet__bullets li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: rgba(126, 44, 31, 0.6);
+}
+
+.sheet__bullets li:last-child {
+  margin-bottom: 0;
+}
+
+.sheet__quote {
+  margin: 14px 0 0;
+  padding: 8px 0 8px 14px;
+  border-left: 2px solid rgba(145, 42, 31, 0.45);
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.5;
+  color: rgba(56, 39, 20, 0.82);
+}
+
+.sheet__quote p {
+  margin: 0;
+}
+
+.sheet__quote cite {
+  display: block;
+  margin-top: 6px;
+  font-family: "Saira", "Bahnschrift", sans-serif;
+  font-size: 8.5px;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: rgba(126, 44, 31, 0.66);
+}
+
+/* Sheet header */
+.sheet__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(83, 57, 24, 0.2);
+  font-family: "Saira", "Bahnschrift", sans-serif;
+}
+
+.sheet__org {
+  margin: 0 0 5px;
+  font-size: 18px;
+  font-weight: 600;
+  font-stretch: 94%;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #47351e;
+}
+
+.sheet__kicker {
+  margin: 0;
+  font-family: "Courier New", "Consolas", monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(73, 53, 29, 0.55);
+}
+
+.sheet__ref {
+  margin: 1px 0 0;
+  font-family: "Courier New", "Consolas", monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+  color: rgba(73, 53, 29, 0.58);
+}
+
+/* Title and stamp */
+.sheet__title-row {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin: 34px 0 0;
+}
+
+.sheet__title {
+  margin: 0;
+  font-family: "Saira", "Bahnschrift", sans-serif;
+  font-size: 46px;
+  font-weight: 550;
+  font-stretch: 90%;
+  line-height: 1.02;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+  color: #3d2c17;
+}
+
+.sheet__stamp {
+  flex: none;
+  margin-top: 3px;
+  padding: 5px 11px 6px;
+  border: 2px solid rgba(150, 44, 33, 0.55);
+  font-family: "Courier New", "Consolas", monospace;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(145, 38, 29, 0.7);
+  transform: rotate(-6deg);
+  box-shadow: inset 0 0 0 1px rgba(150, 44, 33, 0.18);
+  opacity: 0.86;
+}
+
+.sheet__rule {
+  width: 76px;
+  height: 3px;
+  margin: 18px 0 26px;
+  background: linear-gradient(90deg, #6b4b24, rgba(107, 75, 36, 0.05));
+}
+
+/* Sheet body */
+.sheet__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  font-family: "Courier New", "Consolas", monospace;
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: #4a3822;
+}
+
+.sheet__fields {
+  margin: 0;
+}
+
+.sheet__field {
+  display: grid;
+  grid-template-columns: 190px 1fr;
+  gap: 18px;
+  padding: 9px 0;
+  border-bottom: 1px dotted rgba(83, 57, 24, 0.24);
+}
+
+.sheet__field dt {
+  font-family: "Saira", "Bahnschrift", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.9;
+  text-transform: uppercase;
+  color: rgba(73, 53, 29, 0.62);
+}
+
+.sheet__field dd {
+  margin: 0;
+  font-size: 15px;
+  letter-spacing: 0.015em;
+  color: #3f2d18;
+}
+
+.sheet__section {
+  margin-top: 24px;
+}
+
+.sheet__label {
+  margin: 0 0 8px;
+  font-family: "Saira", "Bahnschrift", sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(73, 53, 29, 0.7);
+}
+
+.sheet__redacted {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 12px 0 4px;
+}
+
+.sheet__redacted span {
+  display: block;
+  height: 13px;
+  border-radius: 1px;
+  background: linear-gradient(180deg, rgba(42, 31, 18, 0.92), rgba(31, 23, 13, 0.96));
+  transform-origin: left center;
+  opacity: 0.84;
+}
+
+.sheet__list {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sheet__list li {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 9px 0;
+  border-bottom: 1px dotted rgba(83, 57, 24, 0.24);
+  font-size: 16px;
+  letter-spacing: 0.03em;
+}
+
+.sheet__index {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: rgba(73, 53, 29, 0.45);
+}
+
+.sheet__annexes {
+  width: 100%;
+  margin-top: 12px;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.sheet__annexes th {
+  padding: 7px 8px;
+  border-bottom: 1px solid rgba(83, 57, 24, 0.35);
+  font-family: "Saira", "Bahnschrift", sans-serif;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-align: left;
+  text-transform: uppercase;
+  color: rgba(73, 53, 29, 0.56);
+}
+
+.sheet__annexes td {
+  padding: 9px 8px;
+  border-bottom: 1px dotted rgba(83, 57, 24, 0.24);
+  vertical-align: top;
+}
+
+.sheet__annexes td:first-child {
+  width: 92px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: rgba(73, 53, 29, 0.56);
+}
+
+.sheet__state {
+  width: 92px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-align: right;
+  text-transform: uppercase;
+  color: rgba(126, 44, 31, 0.78);
+}
+
+.sheet__note {
+  display: flex;
+  gap: 12px;
+  margin: 24px 0 0;
+  padding: 10px 0 10px 13px;
+  border-left: 2px solid rgba(145, 42, 31, 0.55);
+  font-size: 12px;
+  line-height: 1.5;
+  font-style: italic;
+  color: rgba(65, 46, 24, 0.76);
+}
+
+.sheet__note--callout {
+  margin-top: 20px;
+  font-style: normal;
+}
+
+.sheet__note-label {
+  flex: none;
+  font-family: "Saira", "Bahnschrift", sans-serif;
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 2;
+  color: rgba(145, 42, 31, 0.68);
+}
+
+.sheet__sign {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 26px;
+  font-size: 13px;
+  color: rgba(65, 46, 24, 0.8);
+}
+
+.sheet__sign span {
+  font-family: "Saira", "Bahnschrift", sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: rgba(73, 53, 29, 0.5);
+}
+
+.sheet__sign strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 20px;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  color: rgba(56, 39, 20, 0.85);
+}
+
+.sheet__visa {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  margin: 18px 0 0;
+}
+
+.sheet__visa-label {
+  flex: none;
+  font-family: "Saira", "Bahnschrift", sans-serif;
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(73, 53, 29, 0.48);
+}
+
+.sheet__visa-line {
+  flex: 1;
+  height: 1px;
+  margin-bottom: 4px;
+  background: linear-gradient(90deg, rgba(83, 57, 24, 0.26), rgba(83, 57, 24, 0.06));
+}
+
+.sheet__visa-mark {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 16px;
+  font-style: italic;
+  color: rgba(56, 39, 20, 0.72);
+  transform: rotate(-2deg);
+}
+
+.sheet__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 20px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(83, 57, 24, 0.22);
+  font-family: "Courier New", "Consolas", monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.12em;
+  color: rgba(73, 53, 29, 0.46);
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .archive,
+  .archive__table,
+  .archive__folder,
+  .archive__sheet,
+  .archive__head,
+  .archive__foot {
+    transition-duration: 1ms !important;
+  }
+
+  .archive.is-active .archive__folder-inner {
+    animation: none !important;
+    opacity: 1;
+  }
+
+  .archive__sheet.is-active .sheet__redacted span {
+    animation: none !important;
+    transform: none;
+  }
+}
+
+.reduce-motion .archive,
+.reduce-motion .archive__table,
+.reduce-motion .archive__folder,
+.reduce-motion .archive__sheet,
+.reduce-motion .archive__head,
+.reduce-motion .archive__foot {
+  transition-duration: 1ms !important;
+}
+
+.reduce-motion .archive.is-active .archive__folder-inner {
+  animation: none !important;
+  opacity: 1;
+}
+
+.reduce-motion .archive__sheet.is-active .sheet__redacted span {
+  animation: none !important;
+  transform: none;
+}

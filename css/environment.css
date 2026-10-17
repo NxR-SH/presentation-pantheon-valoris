@@ -1,0 +1,169 @@
+/* ==========================================================================
+   environment.css — screen dressing, practical lights and local bloom.
+   All geometry is expressed in the 1920 x 1080 stage coordinate space.
+   The right-hand CRT feeds are the original photographic plate: no overlay,
+   no branding, nothing is drawn on top of them.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Ambient treatment on the surrounding CRTs
+   -------------------------------------------------------------------------- */
+.screen-dressing {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.55) 0px,
+    rgba(0, 0, 0, 0.55) 1px,
+    rgba(255, 255, 255, 0.02) 2px,
+    rgba(255, 255, 255, 0.02) 3px
+  );
+  mix-blend-mode: overlay;
+  opacity: 0.16;
+  animation: dressing-flicker 6.5s steps(1) infinite;
+  will-change: opacity;
+}
+
+.screen-dressing--upper {
+  left: 1516px;
+  top: -26px;
+  width: 220px;
+  height: 202px;
+  border-radius: 28px;
+  -webkit-mask-image: radial-gradient(ellipse 78% 74% at 52% 48%, #000 40%, rgba(0, 0, 0, 0.5) 72%, transparent 96%);
+  mask-image: radial-gradient(ellipse 78% 74% at 52% 48%, #000 40%, rgba(0, 0, 0, 0.5) 72%, transparent 96%);
+}
+
+.screen-dressing--far {
+  left: 1798px;
+  top: 408px;
+  width: 136px;
+  height: 218px;
+  border-radius: 34px 0 0 30px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 82% at 45% 50%, #000 45%, transparent 98%);
+  mask-image: radial-gradient(ellipse 90% 82% at 45% 50%, #000 45%, transparent 98%);
+}
+
+.screen-dressing--lower-left {
+  left: 8px;
+  top: 664px;
+  width: 420px;
+  height: 296px;
+  border-radius: 14px;
+  opacity: 0.10;
+  animation-delay: -2.2s;
+  -webkit-mask-image: radial-gradient(ellipse 76% 70% at 48% 50%, #000 35%, transparent 92%);
+  mask-image: radial-gradient(ellipse 76% 70% at 48% 50%, #000 35%, transparent 92%);
+}
+
+@keyframes dressing-flicker {
+  0%, 100% { opacity: 0.14; }
+  7% { opacity: 0.19; }
+  8% { opacity: 0.12; }
+  39% { opacity: 0.16; }
+  40% { opacity: 0.10; }
+  41% { opacity: 0.18; }
+  72% { opacity: 0.15; }
+  73% { opacity: 0.11; }
+  74% { opacity: 0.17; }
+}
+
+/* --------------------------------------------------------------------------
+   Practical lights of the room
+   -------------------------------------------------------------------------- */
+.room-light {
+  position: absolute;
+  z-index: 4;
+  pointer-events: none;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+  filter: blur(26px);
+  will-change: opacity;
+}
+
+.room-light--red {
+  left: 606px;
+  top: 18px;
+  width: 560px;
+  height: 430px;
+  background: radial-gradient(ellipse at 50% 50%, rgba(210, 34, 16, 0.29) 0%, rgba(160, 24, 12, 0.14) 42%, rgba(120, 18, 10, 0.045) 64%, transparent 78%);
+  opacity: 0.48;
+  animation: red-breathe 11s ease-in-out infinite;
+}
+
+.room-light--fluoro {
+  left: 1050px;
+  top: -110px;
+  width: 780px;
+  height: 430px;
+  background: radial-gradient(ellipse at 50% 45%, rgba(210, 250, 235, 0.22) 0%, rgba(170, 220, 210, 0.08) 45%, transparent 72%);
+  opacity: 0.7;
+  animation: fluoro-breathe 16s ease-in-out infinite;
+}
+
+@keyframes red-breathe {
+  0%, 100% { opacity: 0.48; }
+  36% { opacity: 0.60; }
+  64% { opacity: 0.44; }
+  80% { opacity: 0.56; }
+}
+
+@keyframes fluoro-breathe {
+  0%, 100% { opacity: 0.64; }
+  23% { opacity: 0.72; }
+  24% { opacity: 0.60; }
+  25% { opacity: 0.71; }
+  60% { opacity: 0.67; }
+  61% { opacity: 0.58; }
+  62% { opacity: 0.66; }
+}
+
+/* --------------------------------------------------------------------------
+   Local bloom around the interactive and central screens
+   -------------------------------------------------------------------------- */
+.glow {
+  position: absolute;
+  z-index: 9;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  will-change: opacity;
+}
+
+.glow--left {
+  left: -80px;
+  top: 30px;
+  width: 840px;
+  height: 660px;
+  background:
+    radial-gradient(ellipse 62% 54% at 46% 52%, rgba(122, 190, 168, 0.11) 0%, rgba(70, 120, 108, 0.04) 50%, transparent 76%),
+    radial-gradient(ellipse 28% 18% at 22% 12%, rgba(220, 255, 245, 0.10), transparent 80%);
+  filter: blur(12px);
+  animation: glow-breathe 13s ease-in-out infinite;
+}
+
+.glow--right {
+  left: 1230px;
+  top: 190px;
+  width: 620px;
+  height: 520px;
+  background: radial-gradient(ellipse 55% 52% at 48% 52%, rgba(140, 208, 190, 0.13) 0%, rgba(70, 120, 110, 0.04) 52%, transparent 76%);
+  filter: blur(14px);
+  animation: glow-breathe 9s ease-in-out infinite reverse;
+}
+
+@keyframes glow-breathe {
+  0%, 100% { opacity: 0.72; }
+  41% { opacity: 0.9; }
+  43% { opacity: 0.6; }
+  45% { opacity: 0.84; }
+  70% { opacity: 0.76; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .screen-dressing,
+  .room-light,
+  .glow {
+    animation: none !important;
+  }
+}

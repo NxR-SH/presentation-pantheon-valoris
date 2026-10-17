@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#050706">
+  <title>Archives — Le Panthéon / Valoris</title>
+  <meta name="description" content="Menu d'archives interactif : deux dossiers confidentiels posés sur une table, consultables au clavier.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23090c0a'/%3E%3Crect x='5' y='8' width='22' height='16' rx='3' fill='none' stroke='%23b9c7b6' stroke-width='1.4'/%3E%3Cpath d='M9 14h14M9 18h10' stroke='%23b9c7b6' stroke-width='1.4'/%3E%3C/svg%3E">
+  <link rel="preload" href="assets/fonts/Saira-Variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/images/room-plate.webp" as="image" type="image/webp">
+  <link rel="preload" href="assets/images/dossier-folder.webp" as="image" type="image/webp">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/environment.css">
+  <link rel="stylesheet" href="css/crt-effects.css">
+  <link rel="stylesheet" href="css/menus.css">
+  <link rel="stylesheet" href="css/archive.css">
+</head>
+<body>
+  <div class="app" id="app" data-screen="main">
+
+    <!-- Ambient bed: keeps the composition on non 16:9 displays without cropping it. -->
+    <div class="ambient-bed" aria-hidden="true">
+      <div class="ambient-bed__image"></div>
+      <div class="ambient-bed__shade"></div>
+    </div>
+
+    <!-- Fixed 1920x1080 stage, scaled as a whole by JS to preserve every proportion. -->
+    <div class="stage" id="stage">
+      <div class="scene" id="scene" aria-label="Surveillance room with CRT monitors">
+        <img class="plate" src="assets/images/room-plate.webp" alt="" draggable="false" decoding="async">
+
+        <!-- The right-hand CRTs are left as photographed: live feeds, no branding. -->
+
+        <!-- Ambient CRT treatment on the other screens of the room. -->
+        <div class="screen-dressing screen-dressing--upper" aria-hidden="true"></div>
+        <div class="screen-dressing screen-dressing--far" aria-hidden="true"></div>
+        <div class="screen-dressing screen-dressing--lower-left" aria-hidden="true"></div>
+
+        <div class="room-light room-light--red" aria-hidden="true"></div>
+        <div class="room-light room-light--fluoro" aria-hidden="true"></div>
+
+        <div class="glow glow--left" aria-hidden="true"></div>
+        <div class="glow glow--right" aria-hidden="true"></div>
+
+        <!-- ============================ INTERACTIVE CRT ============================ -->
+        <section class="crt" id="crt" aria-label="Archive menu television">
+          <div class="crt__glass" aria-hidden="true"></div>
+          <canvas class="crt__noise" id="ui-noise" width="681" height="531" aria-hidden="true"></canvas>
+          <div class="crt__flicker" aria-hidden="true"></div>
+          <div class="crt__scanlines" aria-hidden="true"></div>
+          <div class="crt__reflection" aria-hidden="true"></div>
+          <div class="crt__vignette" aria-hidden="true"></div>
+
+          <div class="crt__ui" id="ui">
+            <div class="menu-stage menu-stage--duo" id="menu-stage">
+              <p class="menu-overline">ARCHIVES CLASSIFIÉES</p>
+              <div class="menu-list" id="menu-list" role="menu" aria-label="Archives"></div>
+              <p class="menu-desc" id="menu-desc"></p>
+            </div>
+
+            <div class="ui-hint" id="ui-hint" aria-hidden="true">
+              <span><kbd>&uarr;</kbd><kbd>&darr;</kbd> NAVIGUER</span>
+              <span><kbd>ENTER</kbd> OUVRIR</span>
+            </div>
+          </div>
+
+          <div class="crt__boot" aria-hidden="true"></div>
+        </section>
+
+        <!-- ============================== ARCHIVE DESK ============================= -->
+        <section class="archive" id="archive" tabindex="-1" hidden aria-hidden="true" aria-label="Dossier d'archive">
+          <div class="archive__table" aria-hidden="true"></div>
+          <div class="archive__light" aria-hidden="true"></div>
+          <div class="archive__vignette" aria-hidden="true"></div>
+
+          <header class="archive__head">
+            <div class="archive__identity">
+              <p class="archive__kicker">SERVICE DES ARCHIVES</p>
+              <p class="archive__org" id="archive-org"></p>
+            </div>
+            <div class="archive__meta">
+              <p id="archive-ref"></p>
+              <p>ACCÈS RESTREINT</p>
+            </div>
+          </header>
+
+          <div class="archive__desk">
+            <div class="archive__folder" id="archive-folder" role="button" tabindex="0" aria-label="Dossier fermé">
+              <div class="archive__folder-inner">
+                <img class="archive__folder-art" src="assets/images/dossier-folder.webp" alt="Dossier fermé" draggable="false">
+                <img class="archive__seal" id="archive-seal" src="assets/images/pantheon-seal.png" alt="" draggable="false">
+              </div>
+            </div>
+            <div class="archive__pages" id="archive-pages" aria-hidden="true"></div>
+          </div>
+
+          <footer class="archive__foot">
+            <div class="archive__status">
+              <span class="archive__counter" id="archive-counter" aria-live="polite">COUVERTURE</span>
+              <span class="archive__hint" id="archive-hint">DOSSIER FERMÉ</span>
+            </div>
+            <div class="archive__controls">
+              <button class="archive__btn" id="archive-prev" type="button">&larr; PRÉCÉDENT</button>
+              <button class="archive__btn archive__btn--primary" id="archive-next" type="button">OUVRIR LE DOSSIER</button>
+            </div>
+            <p class="archive__keys"><kbd>&larr;</kbd><kbd>&rarr;</kbd> FEUILLETER <span>·</span> <kbd>ESC</kbd> RETOUR</p>
+          </footer>
+        </section>
+
+        <div class="scene-vignette" aria-hidden="true"></div>
+        <div class="scene-grade" aria-hidden="true"></div>
+        <div class="film-grain" aria-hidden="true"></div>
+        <div class="film-grain film-grain--b" aria-hidden="true"></div>
+        <div class="scratches" aria-hidden="true"></div>
+        <div class="scene-shade" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <p class="rotate-hint">Rotate your device to landscape for the full surveillance room.</p>
+
+    <div class="live-region" id="live" aria-live="polite" aria-atomic="true"></div>
+    <noscript>
+      <div class="noscript">This recreation needs JavaScript to power the CRT menus.</div>
+    </noscript>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

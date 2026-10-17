@@ -1,0 +1,266 @@
+/* ==========================================================================
+   menus.css — the in-tube interface
+   Two archive entries only: centered condensed caps, matching the reference
+   layout (overline, two entries, one-line description, control hint).
+   ========================================================================== */
+
+.menu-stage {
+  position: absolute;
+  left: 0;
+  top: 40px;
+  width: 640px;
+  opacity: 1;
+  transition: opacity 130ms ease, transform 130ms ease;
+  will-change: opacity, transform;
+}
+
+/* Two-entry archive menu: the tube holds only the two dossiers. */
+.menu-stage--duo {
+  top: 116px;
+}
+
+.menu-overline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: 0 0 24px;
+  font-size: 10.5px;
+  font-weight: 500;
+  font-stretch: 96%;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: rgba(182, 199, 174, 0.42);
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0.8);
+}
+
+.menu-overline::before,
+.menu-overline::after {
+  content: "";
+  width: 54px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(190, 210, 182, 0.28));
+}
+
+.menu-overline::after {
+  background: linear-gradient(90deg, rgba(190, 210, 182, 0.28), transparent);
+}
+
+.menu-stage--duo .menu-item {
+  height: 104px;
+  font-size: 76px;
+  letter-spacing: 0.035em;
+}
+
+.menu-stage--duo .menu-item::after {
+  bottom: 11px;
+  left: 22%;
+  right: 22%;
+}
+
+.menu-stage--duo .menu-desc {
+  min-height: 38px;
+  margin-top: 24px;
+  font-size: 12.5px;
+  letter-spacing: 0.2em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.crt.is-ready .crt__ui {
+  opacity: 1;
+}
+
+.crt__ui {
+  opacity: 0;
+  transition: opacity 600ms ease 260ms;
+}
+
+/* --------------------------------------------------------------------------
+   Lists and items
+   -------------------------------------------------------------------------- */
+.menu-list {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+.menu-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 92.4px;
+  padding: 0 18px;
+  font-family: "Saira", "Bahnschrift", sans-serif;
+  font-size: 81px;
+  font-weight: 500;
+  font-stretch: 80%;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: rgba(177, 189, 170, 0.74);
+  text-shadow:
+    0 0 1px rgba(210, 228, 205, 0.22),
+    0 0 15px rgba(140, 185, 155, 0.10),
+    0 2px 2px rgba(0, 0, 0, 0.55);
+  transition:
+    color 180ms ease,
+    background-color 220ms ease,
+    text-shadow 220ms ease,
+    transform 180ms ease,
+    letter-spacing 300ms ease;
+}
+
+.menu-item::before {
+  content: "";
+  position: absolute;
+  inset: 4px 4% 4px 4%;
+  opacity: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(155, 190, 165, 0.04) 16%,
+    rgba(190, 220, 195, 0.09) 50%,
+    rgba(155, 190, 165, 0.04) 84%,
+    transparent 100%
+  );
+  transition: opacity 200ms ease;
+  pointer-events: none;
+}
+
+.menu-item::after {
+  content: "";
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: 9px;
+  height: 1px;
+  opacity: 0;
+  background: linear-gradient(90deg, transparent, rgba(215, 232, 208, 0.38), transparent);
+  box-shadow: 0 0 10px rgba(190, 230, 205, 0.18);
+  transition: opacity 220ms ease;
+  pointer-events: none;
+}
+
+.menu-item:hover {
+  color: rgba(213, 224, 205, 0.9);
+}
+
+.menu-item.is-active {
+  color: #e2ead9;
+  text-shadow:
+    0 0 2px rgba(238, 250, 230, 0.4),
+    0 0 22px rgba(176, 222, 194, 0.24),
+    0 0 54px rgba(140, 190, 160, 0.13),
+    0 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+.menu-item__label {
+  filter: blur(0.22px);
+}
+
+.menu-item.is-active::before,
+.menu-item.is-active::after {
+  opacity: 1;
+}
+
+.menu-item:active {
+  transform: translateY(1px);
+  filter: brightness(1.12);
+}
+
+/* --------------------------------------------------------------------------
+   Description
+   -------------------------------------------------------------------------- */
+.menu-desc {
+  width: 512px;
+  min-height: 0;
+  margin: 14px auto 0;
+  padding: 0 4px;
+  font-size: 17px;
+  font-weight: 400;
+  font-stretch: 96%;
+  line-height: 1.42;
+  letter-spacing: 0.045em;
+  text-align: center;
+  color: rgba(172, 188, 164, 0.58);
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+  transition: opacity 220ms ease;
+}
+
+.menu-desc:empty {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   Controls hint
+   -------------------------------------------------------------------------- */
+.ui-hint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 7px;
+  z-index: 6;
+  display: flex;
+  justify-content: center;
+  gap: 26px;
+  font-size: 9.5px;
+  font-weight: 500;
+  font-stretch: 96%;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(182, 197, 176, 0.24);
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.85);
+  transition: opacity 300ms ease;
+  pointer-events: none;
+}
+
+.ui-hint span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.ui-hint kbd {
+  display: inline-block;
+  min-width: 17px;
+  padding: 1px 4px 2px;
+  border: 1px solid rgba(188, 206, 184, 0.22);
+  border-radius: 1px;
+  font-family: inherit;
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  text-align: center;
+  color: rgba(205, 220, 198, 0.5);
+  background: rgba(8, 14, 10, 0.35);
+}
+
+/* --------------------------------------------------------------------------
+   Focus / accessible states
+   -------------------------------------------------------------------------- */
+.menu-item:focus-visible {
+  outline: none;
+}
+
+.crt.is-ready .menu-item.is-active:focus {
+  outline: none;
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .menu-stage,
+  .menu-item {
+    transition-duration: 1ms !important;
+  }
+}
+
+.reduce-motion .menu-stage,
+.reduce-motion .menu-item {
+  transition-duration: 1ms !important;
+}
